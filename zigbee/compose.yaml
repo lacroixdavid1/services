@@ -16,8 +16,8 @@ services:
       - TS_LOCAL_ADDR_PORT=127.0.0.1:41234 
     #- TS_ACCEPT_DNS=true # Uncomment when using MagicDNS
     volumes:
-      - /mnt/data-nvme/services/zigbee/tailscale/config:/config 
-      - /mnt/data-nvme/services/zigbee/tailscale/state:/var/lib/tailscale 
+      - ${DATA_NVME_PATH}/zigbee/tailscale/config:/config 
+      - ${DATA_NVME_PATH}/zigbee/tailscale/state:/var/lib/tailscale 
       - ./ts-serve.json:/ts-serve.json:ro
     devices:
       - /dev/net/tun:/dev/net/tun 
@@ -53,7 +53,7 @@ services:
       - ZIGBEE2MQTT_CONFIG_FRONTEND_HOST=0.0.0.0
       - ZIGBEE2MQTT_CONFIG_FRONTEND_PORT=8080
     volumes:
-      - /mnt/data-nvme/services/zigbee/data:/app/data
+      - ${DATA_NVME_PATH}/zigbee/data:/app/data
       - /etc/localtime:/etc/localtime:ro
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:8080"]

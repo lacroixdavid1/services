@@ -17,8 +17,8 @@ services:
       - TS_ENABLE_HEALTH_CHECK=true
       - TS_LOCAL_ADDR_PORT=127.0.0.1:41234
     volumes:
-      - /mnt/data-nvme/services/uptime-kuma/tailscale/config:/config
-      - /mnt/data-nvme/services/uptime-kuma/tailscale/state:/var/lib/tailscale
+      - ${DATA_NVME_PATH}/uptime-kuma/tailscale/config:/config
+      - ${DATA_NVME_PATH}/uptime-kuma/tailscale/state:/var/lib/tailscale
       - ./ts-serve.json:/ts-serve.json:ro
     devices:
       - /dev/net/tun:/dev/net/tun
@@ -45,7 +45,7 @@ services:
     environment:
       - TZ=America/New_York
     volumes:
-      - /mnt/data-nvme/services/uptime-kuma/app:/app/data
+      - ${DATA_NVME_PATH}/uptime-kuma/app:/app/data
     depends_on:
       tailscale:
         condition: service_healthy

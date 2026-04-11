@@ -16,8 +16,8 @@ services:
       - TS_LOCAL_ADDR_PORT=127.0.0.1:41234 
     #- TS_ACCEPT_DNS=true # Uncomment when using MagicDNS
     volumes:
-      - /mnt/data-nvme/services/home-assistant/tailscale/config:/config 
-      - /mnt/data-nvme/services/home-assistant/tailscale/state:/var/lib/tailscale 
+      - ${DATA_NVME_PATH}/home-assistant/tailscale/config:/config 
+      - ${DATA_NVME_PATH}/home-assistant/tailscale/state:/var/lib/tailscale 
       - ./ts-serve.json:/ts-serve.json:ro
     devices:
       - /dev/net/tun:/dev/net/tun 
@@ -44,7 +44,7 @@ services:
       - POSTGRES_DB=homeassistant
       - TZ=America/New_York
     volumes:
-      - /mnt/data-nvme/services/home-assistant/postgres:/var/lib/postgresql/data
+      - ${DATA_NVME_PATH}/home-assistant/postgres:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U hauser -d homeassistant"]
       interval: 10s
@@ -72,7 +72,7 @@ services:
       - PGID=1000
       - TZ=America/New_York
     volumes:
-      - /mnt/data-nvme/services/home-assistant/app:/config
+      - ${DATA_NVME_PATH}/home-assistant/app:/config
       - /etc/localtime:/etc/localtime:ro
     depends_on:
       tailscale:

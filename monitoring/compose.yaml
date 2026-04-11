@@ -18,8 +18,8 @@ services:
       - TS_LOCAL_ADDR_PORT=127.0.0.1:41234 
     #- TS_ACCEPT_DNS=true # Uncomment when using MagicDNS
     volumes:
-      - /mnt/data-nvme/services/monitoring/tailscale/config:/config 
-      - /mnt/data-nvme/services/monitoring/tailscale/state:/var/lib/tailscale 
+      - ${DATA_NVME_PATH}/monitoring/tailscale/config:/config 
+      - ${DATA_NVME_PATH}/monitoring/tailscale/state:/var/lib/tailscale 
       - ./ts-serve.json:/ts-serve.json:ro
     devices:
       - /dev/net/tun:/dev/net/tun 
@@ -40,8 +40,8 @@ services:
     container_name: prometheus
     volumes:
       - ./prometheus:/etc/prometheus
-      - /mnt/data-nvme/services/monitoring/prometheus:/prometheus
-      - /mnt/data-nvme/services/monitoring/prometheus/ha_token:/etc/prometheus/ha_token:ro
+      - ${DATA_NVME_PATH}/monitoring/prometheus:/prometheus
+      - ${DATA_NVME_PATH}/monitoring/prometheus/ha_token:/etc/prometheus/ha_token:ro
     environment:
       - PUID=1000
       - PGID=1000
@@ -112,7 +112,7 @@ services:
     command: -config.file=/etc/loki/loki.yml
     volumes:
       - ./loki/loki.yml:/etc/loki/loki.yml:ro
-      - /mnt/data-nvme/services/monitoring/loki:/loki
+      - ${DATA_NVME_PATH}/monitoring/loki:/loki
     environment:
       - TZ=America/New_York
     networks:
@@ -128,7 +128,7 @@ services:
     volumes:
       - ./promtail/promtail.yml:/etc/promtail/promtail.yml:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /mnt/data-nvme/services/monitoring/promtail:/var/promtail
+      - ${DATA_NVME_PATH}/monitoring/promtail:/var/promtail
     environment:
       - TZ=America/New_York
     networks:
@@ -153,7 +153,7 @@ services:
       - GF_USERS_ALLOW_SIGN_UP=false
       - GF_INSTALL_PLUGINS=grafana-clock-panel,natel-discrete-panel,grafana-piechart-panel
     volumes:
-      - /mnt/data-nvme/services/monitoring/grafana:/var/lib/grafana
+      - ${DATA_NVME_PATH}/monitoring/grafana:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning:ro
     networks:
       - compose_monitoring

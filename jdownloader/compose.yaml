@@ -16,8 +16,8 @@ services:
       - TS_LOCAL_ADDR_PORT=127.0.0.1:41234 
     #- TS_ACCEPT_DNS=true # Uncomment when using MagicDNS
     volumes:
-      - /mnt/data-nvme/services/jdownloader/tailscale/config:/config 
-      - /mnt/data-nvme/services/jdownloader/tailscale/state:/var/lib/tailscale 
+      - ${DATA_NVME_PATH}/jdownloader/tailscale/config:/config 
+      - ${DATA_NVME_PATH}/jdownloader/tailscale/state:/var/lib/tailscale 
       - ./ts-serve.json:/ts-serve.json:ro
     devices:
       - /dev/net/tun:/dev/net/tun 
@@ -48,8 +48,8 @@ services:
       tailscale:
         condition: service_healthy
     volumes:
-      - /mnt/data-nvme/services/jdownloader/app:/config
-      - /mnt/data/medias:/output
+      - ${DATA_NVME_PATH}/jdownloader/app:/config
+      - ${DATA_PATH}/medias:/output
     healthcheck:
       test: ["CMD", "pgrep", "-f", "JDownloader"] 
       interval: 30s 

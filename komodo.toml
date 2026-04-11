@@ -19,6 +19,7 @@ webhook_force_deploy = true
 run_directory = "adguard-home"
 environment = """
 TS_AUTHKEY = [[TS_AUTHKEY]]
+DATA_NVME_PATH = [[DATA_NVME_PATH]]
 """
 
 ##
@@ -36,6 +37,7 @@ webhook_force_deploy = true
 run_directory = "caddy"
 environment = """
 PUBLIC_DOMAIN = [[PUBLIC_DOMAIN]]
+DATA_NVME_PATH = [[DATA_NVME_PATH]]
 """
 
 ##
@@ -52,6 +54,7 @@ linked_repo = "services"
 run_directory = "changedetection"
 environment = """
 TS_AUTHKEY = [[TS_AUTHKEY]]
+DATA_NVME_PATH = [[DATA_NVME_PATH]]
 """
 
 ##
@@ -68,6 +71,8 @@ linked_repo = "services"
 run_directory = "emby"
 environment = """
 TS_AUTHKEY = [[TS_AUTHKEY]]
+DATA_NVME_PATH = [[DATA_NVME_PATH]]
+DATA_PATH = [[DATA_PATH]]
 """
 
 ##
@@ -84,6 +89,7 @@ linked_repo = "services"
 run_directory = "esphome"
 environment = """
 TS_AUTHKEY = [[TS_AUTHKEY]]
+DATA_NVME_PATH = [[DATA_NVME_PATH]]
 """
 
 ##
@@ -102,6 +108,7 @@ environment = """
 TS_AUTHKEY_OPENCLAW = [[TS_AUTHKEY_OPENCLAW]]
 HA_POSTGRES_USER = [[HA_POSTGRES_USER]]
 HA_POSTGRES_PASSWORD = [[HA_POSTGRES_PASSWORD]]
+DATA_NVME_PATH = [[DATA_NVME_PATH]]
 """
 
 ##
@@ -134,6 +141,8 @@ linked_repo = "services"
 run_directory = "ollama"
 environment = """
 TS_AUTHKEY_OPENCLAW = [[TS_AUTHKEY_OPENCLAW]]
+DATA_NVME_PATH = [[DATA_NVME_PATH]]
+DATA_PATH = [[DATA_PATH]]
 """
 
 ##
@@ -150,6 +159,8 @@ linked_repo = "services"
 run_directory = "jdownloader"
 environment = """
 TS_AUTHKEY = [[TS_AUTHKEY]]
+DATA_NVME_PATH = [[DATA_NVME_PATH]]
+DATA_PATH = [[DATA_PATH]]
 """
 
 ##
@@ -164,7 +175,11 @@ auto_update_all_services = true
 destroy_before_deploy = true
 linked_repo = "services"
 run_directory = "matter"
+environment = """
+DATA_NVME_PATH = [[DATA_NVME_PATH]]
+"""
 
+##
 ##
 
 [[stack]]
@@ -179,6 +194,7 @@ linked_repo = "services"
 run_directory = "otbr"
 environment = """
 RCP_HOST = [[RCP_HOST]]
+DATA_NVME_PATH = [[DATA_NVME_PATH]]
 """
 
 ##
@@ -193,7 +209,11 @@ auto_update_all_services = true
 destroy_before_deploy = true
 linked_repo = "services"
 run_directory = "mosquitto"
+environment = """
+DATA_NVME_PATH = [[DATA_NVME_PATH]]
+"""
 
+##
 ##
 
 [[stack]]
@@ -209,6 +229,7 @@ run_directory = "monitoring"
 environment = """
 TS_AUTHKEY_OPENCLAW = [[TS_AUTHKEY_OPENCLAW]]
 TS_TAILNET = [[TS_TAILNET]]
+DATA_NVME_PATH = [[DATA_NVME_PATH]]
 """
 
 ##
@@ -262,6 +283,7 @@ TS_AUTHKEY = [[TS_AUTHKEY]]
 POSTGRES_USER = [[POSTGRES_USER]]
 POSTGRES_PASSWORD = [[POSTGRES_PASSWORD]]
 POSTGRES_DB = [[POSTGRES_DB]]
+DATA_NVME_PATH = [[DATA_NVME_PATH]]
 """
 
 ##
@@ -278,6 +300,7 @@ linked_repo = "services"
 run_directory = "trilium"
 environment = """
 TS_AUTHKEY = [[TS_AUTHKEY]]
+DATA_NVME_PATH = [[DATA_NVME_PATH]]
 """
 
 ##
@@ -294,6 +317,8 @@ linked_repo = "services"
 run_directory = "calibre-web"
 environment = """
 TS_AUTHKEY = [[TS_AUTHKEY]]
+DATA_NVME_PATH = [[DATA_NVME_PATH]]
+DATA_PATH = [[DATA_PATH]]
 """
 
 ##
@@ -310,6 +335,8 @@ linked_repo = "services"
 run_directory = "arr"
 environment = """
 TS_AUTHKEY = [[TS_AUTHKEY]]
+DATA_NVME_PATH = [[DATA_NVME_PATH]]
+DATA_PATH = [[DATA_PATH]]
 """
 
 ##
@@ -326,6 +353,8 @@ linked_repo = "services"
 run_directory = "qbittorrent"
 environment = """
 TS_AUTHKEY = [[TS_AUTHKEY]]
+DATA_NVME_PATH = [[DATA_NVME_PATH]]
+DATA_PATH = [[DATA_PATH]]
 """
 
 ##
@@ -342,6 +371,7 @@ linked_repo = "services"
 run_directory = "rabbitmq"
 environment = """
 TS_AUTHKEY = [[TS_AUTHKEY]]
+DATA_NVME_PATH = [[DATA_NVME_PATH]]
 """
 
 ##
@@ -358,6 +388,7 @@ linked_repo = "services"
 run_directory = "speedtest"
 environment = """
 TS_AUTHKEY = [[TS_AUTHKEY]]
+DATA_NVME_PATH = [[DATA_NVME_PATH]]
 """
 
 ##
@@ -394,6 +425,7 @@ linked_repo = "services"
 run_directory = "uptime-kuma"
 environment = """
 TS_AUTHKEY = [[TS_AUTHKEY]]
+DATA_NVME_PATH = [[DATA_NVME_PATH]]
 """
 
 ##
@@ -410,6 +442,7 @@ linked_repo = "services"
 run_directory = "zigbee"
 environment = """
 TS_AUTHKEY = [[TS_AUTHKEY]]
+DATA_NVME_PATH = [[DATA_NVME_PATH]]
 """
 
 ##
@@ -427,6 +460,7 @@ run_directory = "n8n"
 environment = """
 TS_AUTHKEY = [[TS_AUTHKEY]]
 TS_TAILNET = [[TS_TAILNET]]
+DATA_NVME_PATH = [[DATA_NVME_PATH]]
 """
 
 ##
@@ -448,6 +482,8 @@ TS_AUTHKEY = [[TS_AUTHKEY]]
 FRIGATE_RTSP_USER = [[FRIGATE_RTSP_USER]]
 FRIGATE_RTSP_PASS = [[FRIGATE_RTSP_PASS]]
 FRIGATE_UNIFI_HOST = [[FRIGATE_UNIFI_HOST]]
+DATA_NVME_PATH = [[DATA_NVME_PATH]]
+DATA_PATH = [[DATA_PATH]]
 """
 
 ##

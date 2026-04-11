@@ -15,8 +15,8 @@ services:
       - TS_ENABLE_HEALTH_CHECK=true
       - TS_LOCAL_ADDR_PORT=127.0.0.1:41234
     volumes:
-      - /mnt/data-nvme/services/calibre-web/tailscale/config:/config
-      - /mnt/data-nvme/services/calibre-web/tailscale/state:/var/lib/tailscale
+      - ${DATA_NVME_PATH}/calibre-web/tailscale/config:/config
+      - ${DATA_NVME_PATH}/calibre-web/tailscale/state:/var/lib/tailscale
       - ./ts-serve.json:/ts-serve.json:ro
     devices:
       - /dev/net/tun:/dev/net/tun
@@ -44,9 +44,9 @@ services:
       - PGID=1000
       - TZ=America/New_York
     volumes:
-      - /mnt/data-nvme/services/calibre-web/app:/config
-      - /mnt/data/medias/books:/books
-      - /mnt/data/medias/calibre:/calibre
+      - ${DATA_NVME_PATH}/calibre-web/app:/config
+      - ${DATA_PATH}/medias/books:/books
+      - ${DATA_PATH}/medias/calibre:/calibre
     depends_on:
       tailscale:
         condition: service_healthy

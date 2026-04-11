@@ -20,8 +20,8 @@ services:
       - TS_LOCAL_ADDR_PORT=127.0.0.1:41234 
     #- TS_ACCEPT_DNS=true # Uncomment when using MagicDNS
     volumes:
-      - /mnt/data-nvme/services/changedetection/tailscale/config:/config 
-      - /mnt/data-nvme/services/changedetection/tailscale/state:/var/lib/tailscale 
+      - ${DATA_NVME_PATH}/changedetection/tailscale/config:/config 
+      - ${DATA_NVME_PATH}/changedetection/tailscale/state:/var/lib/tailscale 
       - ./ts-serve.json:/ts-serve.json:ro
     devices:
       - /dev/net/tun:/dev/net/tun 
@@ -103,7 +103,7 @@ services:
       # - WEBDRIVER_URL=http://browser-selenium-chrome:4444/wd/hub
     # - BASE_URL= #optional
     volumes:
-      - /mnt/data-nvme/services/changedetection/app:/config
+      - ${DATA_NVME_PATH}/changedetection/app:/config
     depends_on:
       browser-sockpuppet-chrome:
         condition: service_started

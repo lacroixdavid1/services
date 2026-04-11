@@ -14,8 +14,8 @@ services:
       - TS_ENABLE_HEALTH_CHECK=true
       - TS_LOCAL_ADDR_PORT=127.0.0.1:41234
     volumes:
-      - /mnt/data-nvme/services/rabbitmq/tailscale/config:/config
-      - /mnt/data-nvme/services/rabbitmq/tailscale/state:/var/lib/tailscale
+      - ${DATA_NVME_PATH}/rabbitmq/tailscale/config:/config
+      - ${DATA_NVME_PATH}/rabbitmq/tailscale/state:/var/lib/tailscale
     devices:
       - /dev/net/tun:/dev/net/tun
     cap_add:

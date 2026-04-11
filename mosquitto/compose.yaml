@@ -13,7 +13,7 @@ services:
       - PGID=1000
       - TZ=America/New_York
     volumes:
-      - /mnt/data-nvme/services/mosquitto/data:/mosquitto/data
+      - ${DATA_NVME_PATH}/mosquitto/data:/mosquitto/data
 
 networks:
   home_automation:

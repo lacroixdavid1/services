@@ -1,18 +1,22 @@
 # Persistence
 
-Two volume mount roots are used across all stacks:
+Two volume mount roots are used across all stacks, injected as environment variables via Komodo:
 
-| Path | Purpose |
+| Variable | Purpose |
 |---|---|
-| `/mnt/data-nvme/services/<service>/` | Config, state, databases |
-| `/mnt/data/` | Large data — media, downloads, archives |
+| `DATA_NVME_PATH` | Config, state, databases — path to fast storage |
+| `DATA_PATH` | Large data — media, downloads, archives |
 
-Each service gets its own subdirectory under `/mnt/data-nvme/services/`. For example:
+Each service gets its own subdirectory under `DATA_NVME_PATH`. For example:
 
 ```
-/mnt/data-nvme/services/home-assistant/app/
-/mnt/data-nvme/services/home-assistant/postgres/
-/mnt/data-nvme/services/home-assistant/tailscale/
+${DATA_NVME_PATH}/home-assistant/app/
+${DATA_NVME_PATH}/home-assistant/postgres/
+${DATA_NVME_PATH}/home-assistant/tailscale/
 ```
 
-Replace these paths with whatever suits your own setup. If you only have one disk, both can point to the same mount — the split is a convention, not a requirement.
+Large media volumes (Emby, Frigate recordings, qBittorrent downloads, Ollama models) are mounted from `DATA_PATH` instead.
+
+## Setup
+
+Set both variables as global variables in Komodo (Settings → Variables) to match your storage layout. If you only have one disk, both can point to the same path.

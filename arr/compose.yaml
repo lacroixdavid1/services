@@ -15,8 +15,8 @@ services:
       - TS_ENABLE_HEALTH_CHECK=true
       - TS_LOCAL_ADDR_PORT=127.0.0.1:41234
     volumes:
-      - /mnt/data-nvme/services/arr/tailscale/config:/config
-      - /mnt/data-nvme/services/arr/tailscale/state:/var/lib/tailscale
+      - ${DATA_NVME_PATH}/arr/tailscale/config:/config
+      - ${DATA_NVME_PATH}/arr/tailscale/state:/var/lib/tailscale
       - ./ts-serve.json:/ts-serve.json:ro
     devices:
       - /dev/net/tun:/dev/net/tun
@@ -45,7 +45,7 @@ services:
       - PROWLARR__AUTH__METHOD=External
       - PROWLARR__AUTH__REQUIRED=DisabledForLocalAddresses
     volumes:
-      - /mnt/data-nvme/services/arr/prowlarr:/config
+      - ${DATA_NVME_PATH}/arr/prowlarr:/config
     depends_on:
       tailscale:
         condition: service_healthy
@@ -72,9 +72,9 @@ services:
       - RADARR__AUTH__METHOD=External
       - RADARR__AUTH__REQUIRED=DisabledForLocalAddresses
     volumes:
-      - /mnt/data-nvme/services/arr/radarr:/config
-      - /mnt/data/medias/qbittorrent:/data/qbittorrent
-      - /mnt/data/medias/movies:/data/movies
+      - ${DATA_NVME_PATH}/arr/radarr:/config
+      - ${DATA_PATH}/medias/qbittorrent:/data/qbittorrent
+      - ${DATA_PATH}/medias/movies:/data/movies
     depends_on:
       tailscale:
         condition: service_healthy
@@ -101,9 +101,9 @@ services:
       - SONARR__AUTH__METHOD=External
       - SONARR__AUTH__REQUIRED=DisabledForLocalAddresses
     volumes:
-      - /mnt/data-nvme/services/arr/sonarr:/config
-      - /mnt/data/medias/qbittorrent:/data/qbittorrent
-      - /mnt/data/medias/series:/data/series
+      - ${DATA_NVME_PATH}/arr/sonarr:/config
+      - ${DATA_PATH}/medias/qbittorrent:/data/qbittorrent
+      - ${DATA_PATH}/medias/series:/data/series
     depends_on:
       tailscale:
         condition: service_healthy
@@ -126,9 +126,9 @@ services:
       - PGID=1000
       - TZ=America/New_York
     volumes:
-      - /mnt/data-nvme/services/arr/bazarr:/config
-      - /mnt/data/medias/series:/data/series
-      - /mnt/data/medias/movies:/data/movies
+      - ${DATA_NVME_PATH}/arr/bazarr:/config
+      - ${DATA_PATH}/medias/series:/data/series
+      - ${DATA_PATH}/medias/movies:/data/movies
     depends_on:
       tailscale:
         condition: service_healthy

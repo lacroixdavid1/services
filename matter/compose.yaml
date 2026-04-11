@@ -16,7 +16,7 @@ services:
       - PGID=1000
       - TZ=America/New_York
     volumes:
-      - /mnt/data-nvme/services/matter/data:/data/
+      - ${DATA_NVME_PATH}/matter/data:/data/
 
 networks:
   home_automation:

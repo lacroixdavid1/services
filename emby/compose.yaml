@@ -16,8 +16,8 @@ services:
       - TS_LOCAL_ADDR_PORT=127.0.0.1:41234 
     #- TS_ACCEPT_DNS=true # Uncomment when using MagicDNS
     volumes:
-      - /mnt/data-nvme/services/emby/tailscale/config:/config 
-      - /mnt/data-nvme/services/emby/tailscale/state:/var/lib/tailscale 
+      - ${DATA_NVME_PATH}/emby/tailscale/config:/config 
+      - ${DATA_NVME_PATH}/emby/tailscale/state:/var/lib/tailscale 
       - ./ts-serve.json:/ts-serve.json:ro
     devices:
       - /dev/net/tun:/dev/net/tun 
@@ -49,10 +49,10 @@ services:
       - PGID=1000
       - TZ=America/New_York
     volumes:
-      - /mnt/data-nvme/services/emby/app:/config
-      - /mnt/data/medias/series:/data/tvshows
-      - /mnt/data/medias/movies:/data/movies
-      - /mnt/data/medias/events:/data/events
+      - ${DATA_NVME_PATH}/emby/app:/config
+      - ${DATA_PATH}/medias/series:/data/tvshows
+      - ${DATA_PATH}/medias/movies:/data/movies
+      - ${DATA_PATH}/medias/events:/data/events
     devices:
       - /dev/dri:/dev/dri
       - /dev/kfd:/dev/kfd

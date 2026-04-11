@@ -15,8 +15,8 @@ services:
       - TS_ENABLE_HEALTH_CHECK=true
       - TS_LOCAL_ADDR_PORT=127.0.0.1:41234
     volumes:
-      - /mnt/data-nvme/services/adguard-home/tailscale/config:/config
-      - /mnt/data-nvme/services/adguard-home/tailscale/state:/var/lib/tailscale
+      - ${DATA_NVME_PATH}/adguard-home/tailscale/config:/config
+      - ${DATA_NVME_PATH}/adguard-home/tailscale/state:/var/lib/tailscale
       - ./ts-serve.json:/ts-serve.json:ro
     devices:
       - /dev/net/tun:/dev/net/tun
@@ -40,8 +40,8 @@ services:
       services_vlan130:
         ipv4_address: 192.168.130.53
     volumes:
-      - /mnt/data-nvme/services/adguard-home/conf:/opt/adguardhome/conf
-      - /mnt/data-nvme/services/adguard-home/work:/opt/adguardhome/work
+      - ${DATA_NVME_PATH}/adguard-home/conf:/opt/adguardhome/conf
+      - ${DATA_NVME_PATH}/adguard-home/work:/opt/adguardhome/work
     environment:
       - TZ=America/New_York
     depends_on:

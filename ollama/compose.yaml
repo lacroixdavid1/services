@@ -15,8 +15,8 @@ services:
       - TS_ENABLE_HEALTH_CHECK=true
       - TS_LOCAL_ADDR_PORT=127.0.0.1:41234
     volumes:
-      - /mnt/data-nvme/services/ollama/tailscale/config:/config
-      - /mnt/data-nvme/services/ollama/tailscale/state:/var/lib/tailscale
+      - ${DATA_NVME_PATH}/ollama/tailscale/config:/config
+      - ${DATA_NVME_PATH}/ollama/tailscale/state:/var/lib/tailscale
       - ./ts-serve.json:/ts-serve.json:ro
     devices:
       - /dev/net/tun:/dev/net/tun
@@ -44,8 +44,8 @@ services:
       - OLLAMA_HOST=0.0.0.0:11434
       - HSA_OVERRIDE_GFX_VERSION=10.3.0
     volumes:
-      - /mnt/data-nvme/services/ollama/app:/root/.ollama/config
-      - /mnt/data/ollama/models:/root/.ollama/models
+      - ${DATA_NVME_PATH}/ollama/app:/root/.ollama/config
+      - ${DATA_PATH}/ollama/models:/root/.ollama/models
     devices:
       - /dev/dri:/dev/dri
       - /dev/kfd:/dev/kfd
@@ -74,7 +74,7 @@ services:
       - OLLAMA_BASE_URL=http://ollama-app:11434
       - WEBUI_AUTH=false
     volumes:
-      - /mnt/data-nvme/services/ollama/ui:/app/backend/data
+      - ${DATA_NVME_PATH}/ollama/ui:/app/backend/data
     depends_on:
       tailscale:
         condition: service_healthy

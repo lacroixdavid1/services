@@ -16,8 +16,8 @@ services:
       - TS_LOCAL_ADDR_PORT=127.0.0.1:41234 
     #- TS_ACCEPT_DNS=true # Uncomment when using MagicDNS
     volumes:
-      - /mnt/data-nvme/services/esphome/tailscale/config:/config 
-      - /mnt/data-nvme/services/esphome/tailscale/state:/var/lib/tailscale 
+      - ${DATA_NVME_PATH}/esphome/tailscale/config:/config 
+      - ${DATA_NVME_PATH}/esphome/tailscale/state:/var/lib/tailscale 
       - ./ts-serve.json:/ts-serve.json:ro
     devices:
       - /dev/net/tun:/dev/net/tun 
@@ -48,8 +48,8 @@ services:
       - PGID=1000
       - TZ=America/New_York
     volumes:
-      - /mnt/data-nvme/services/esphome/config:/config
-      - /mnt/data-nvme/services/esphome/data:/data/
+      - ${DATA_NVME_PATH}/esphome/config:/config
+      - ${DATA_NVME_PATH}/esphome/data:/data/
       - /etc/localtime:/etc/localtime:ro
     healthcheck:
       test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:6052')"]

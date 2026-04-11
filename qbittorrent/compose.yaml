@@ -15,8 +15,8 @@ services:
       - TS_ENABLE_HEALTH_CHECK=true
       - TS_LOCAL_ADDR_PORT=127.0.0.1:41234
     volumes:
-      - /mnt/data-nvme/services/qbittorrent/tailscale/config:/config
-      - /mnt/data-nvme/services/qbittorrent/tailscale/state:/var/lib/tailscale
+      - ${DATA_NVME_PATH}/qbittorrent/tailscale/config:/config
+      - ${DATA_NVME_PATH}/qbittorrent/tailscale/state:/var/lib/tailscale
       - ./ts-serve.json:/ts-serve.json:ro
     devices:
       - /dev/net/tun:/dev/net/tun
@@ -46,16 +46,16 @@ services:
       - TZ=America/New_York
       - WEBUI_PORT=8080
     volumes:
-      - /mnt/data-nvme/services/qbittorrent/app:/config/qBittorrent
-      - /mnt/data/medias/events:/downloads/events
-      - /mnt/data/medias/series:/downloads/series
-      - /mnt/data/medias/movies:/downloads/movies
-      - /mnt/data/medias/incomplete:/downloads/incomplete
-      - /mnt/data/medias/seedcrap:/downloads/seedcrap
-      - /mnt/data/medias/torrents:/downloads/torrents
-      - /mnt/data/medias/switch:/downloads/switch
-      - /mnt/data/medias/books:/downloads/books
-      - /mnt/data/medias/qbittorrent:/downloads/qbittorrent
+      - ${DATA_NVME_PATH}/qbittorrent/app:/config/qBittorrent
+      - ${DATA_PATH}/medias/events:/downloads/events
+      - ${DATA_PATH}/medias/series:/downloads/series
+      - ${DATA_PATH}/medias/movies:/downloads/movies
+      - ${DATA_PATH}/medias/incomplete:/downloads/incomplete
+      - ${DATA_PATH}/medias/seedcrap:/downloads/seedcrap
+      - ${DATA_PATH}/medias/torrents:/downloads/torrents
+      - ${DATA_PATH}/medias/switch:/downloads/switch
+      - ${DATA_PATH}/medias/books:/downloads/books
+      - ${DATA_PATH}/medias/qbittorrent:/downloads/qbittorrent
     depends_on:
       tailscale:
         condition: service_healthy

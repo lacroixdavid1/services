@@ -18,7 +18,7 @@ services:
     volumes:
       - ./config:/etc/caddy
       - ./static:/static:ro
-      - /mnt/data-nvme/services/caddy/app:/data
+      - ${DATA_NVME_PATH}/caddy/app:/data
 networks:
   proxy:
     name: caddy_proxy

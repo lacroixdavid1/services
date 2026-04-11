@@ -15,8 +15,8 @@ services:
       - TS_ENABLE_HEALTH_CHECK=true
       - TS_LOCAL_ADDR_PORT=127.0.0.1:41234
     volumes:
-      - /mnt/data-nvme/services/frigate/tailscale/config:/config
-      - /mnt/data-nvme/services/frigate/tailscale/state:/var/lib/tailscale
+      - ${DATA_NVME_PATH}/frigate/tailscale/config:/config
+      - ${DATA_NVME_PATH}/frigate/tailscale/state:/var/lib/tailscale
       - ./ts-serve.json:/ts-serve.json:ro
     devices:
       - /dev/net/tun:/dev/net/tun
@@ -45,8 +45,8 @@ services:
       - FRIGATE_RTSP_PASS=${FRIGATE_RTSP_PASS}
       - FRIGATE_UNIFI_HOST=${FRIGATE_UNIFI_HOST}
     volumes:
-      - /mnt/data-nvme/services/frigate/app:/config
-      - /mnt/data/frigate/recordings:/media/frigate
+      - ${DATA_NVME_PATH}/frigate/app:/config
+      - ${DATA_PATH}/frigate/recordings:/media/frigate
       - ./config/config.yml:/config/config.yml:ro
       - /etc/localtime:/etc/localtime:ro
     devices:

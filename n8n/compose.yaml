@@ -15,8 +15,8 @@ services:
       - TS_ENABLE_HEALTH_CHECK=true
       - TS_LOCAL_ADDR_PORT=127.0.0.1:41234
     volumes:
-      - /mnt/data-nvme/services/n8n/tailscale/config:/config
-      - /mnt/data-nvme/services/n8n/tailscale/state:/var/lib/tailscale
+      - ${DATA_NVME_PATH}/n8n/tailscale/config:/config
+      - ${DATA_NVME_PATH}/n8n/tailscale/state:/var/lib/tailscale
       - ./ts-serve.json:/ts-serve.json:ro
     devices:
       - /dev/net/tun:/dev/net/tun
@@ -48,7 +48,7 @@ services:
       - WEBHOOK_URL=https://n8n.${TS_TAILNET}
       - N8N_TRUSTED_PROXIES=*
     volumes:
-      - /mnt/data-nvme/services/n8n/app:/root/.n8n
+      - ${DATA_NVME_PATH}/n8n/app:/root/.n8n
     depends_on:
       tailscale:
         condition: service_healthy
