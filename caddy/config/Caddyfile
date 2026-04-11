@@ -7,23 +7,23 @@
 	}
 }
 
-emby.{env.PUBLIC_DOMAIN} {
+emby.{$PUBLIC_DOMAIN} {
 	reverse_proxy http://emby:8096
 }
 
-calibre.{env.PUBLIC_DOMAIN} {
+calibre.{$PUBLIC_DOMAIN} {
 	handle /kobo/* {
 		reverse_proxy http://calibre-web-app:8083
 	}
 	respond 404
 }
 
-static.{env.PUBLIC_DOMAIN} {
+static.{$PUBLIC_DOMAIN} {
     root * /static
     file_server
 }
 
-# hoppscotch.{env.PUBLIC_DOMAIN} {
+# hoppscotch.{$PUBLIC_DOMAIN} {
 # 	reverse_proxy http://hoppscotch:3170
 # }
 
