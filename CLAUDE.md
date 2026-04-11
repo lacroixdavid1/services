@@ -16,13 +16,12 @@ Deployment is fully managed by Komodo using `komodo.toml`. Pushing to the repo t
 
 ## Docker Network Architecture
 
-Six external networks must be created before deploying (see README.md):
-- **`caddy_proxy`** – services accessible through the Caddy reverse proxy (public internet via HTTPS)
-- **`monitoring`** – services that expose Prometheus metrics to the monitoring stack
-- **`home_automation`** – internal network for home automation services (Home Assistant, Mosquitto, Zigbee2MQTT)
-- **`iot_vlan110`** – ipvlan L2 network on `enp6s19` for direct IoT VLAN access (192.168.110.0/24)
-- **`services_vlan130`** – ipvlan L2 network on `enp6s18` for services that need a stable IP on the server VLAN (192.168.130.0/24); used by AdGuard Home at `192.168.130.53` as a network-wide DNS server reachable from all VLANs via UniFi firewall rules
-- **`uptime_kuma`** – network for Uptime Kuma to reach services for health monitoring; join this network on every user-facing service's **nginx** container (not the app container — adding it to the app causes no issues, but adding it to nginx alongside `proxy` can cause DNS resolution to work correctly only when using container names, not service names)
+See [README.md](README.md) for the full network layout and setup commands. Key rules when adding or modifying services:
+
+- Join `uptime_kuma` on the **nginx** container, not the app container — when nginx is on multiple networks, Docker DNS can resolve service names to the wrong container on another network; container names are globally unique and always resolve correctly
+- Join `monitoring` on any container that exposes Prometheus metrics
+- Join `iot_vlan110` (with `driver_opts` endpoint name `eth110`) for direct IoT VLAN access
+- Join `home_automation` for services that need to communicate with Home Assistant, Mosquitto, or Zigbee2MQTT
 
 ## Service Patterns
 
