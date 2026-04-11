@@ -1,32 +1,32 @@
 # Network Architecture
 
-The server runs multiple isolated VLANs managed by a UniFi gateway. Docker containers join these networks directly via ipvlan L2, allowing them to appear as first-class devices on each VLAN.
+Two isolated VLANs are used, managed by a gateway/router with inter-VLAN routing. Docker containers join these networks directly via ipvlan L2, allowing them to appear as first-class devices on each VLAN.
 
 ## VLANs
 
-| VLAN | Subnet | Purpose |
-|---|---|---|
-| IoT (110) | `192.168.110.0/24` | IoT devices, coordinators, sensors |
-| Services (130) | `192.168.130.0/24` | Server infrastructure and self-hosted services |
+| VLAN | Purpose |
+|---|---|
+| IoT | IoT devices, coordinators, sensors |
+| Services | Server infrastructure and self-hosted services |
 
 ## Docker Networks
 
 | Network | Type | Purpose |
 |---|---|---|
-| `iot_vlan110` | ipvlan L2 (`enp6s19`) | Direct access to IoT VLAN — used by Home Assistant, OTBR, Frigate |
-| `services_vlan130` | ipvlan L2 (`enp6s18`) | Stable IP on services VLAN — used by AdGuard Home for network-wide DNS |
+| `iot_vlan110` | ipvlan L2 | Direct access to IoT VLAN — used by Home Assistant, OTBR, Frigate |
+| `services_vlan130` | ipvlan L2 | Stable IP on services VLAN — used by AdGuard Home for network-wide DNS |
 | `caddy_proxy` | bridge | Links Caddy to publicly exposed services |
 | `home_automation` | bridge | Internal bus between Home Assistant, Mosquitto, and Zigbee2MQTT |
 | `monitoring` | bridge | Links Prometheus to services that expose metrics |
 | `uptime_kuma` | bridge | Allows Uptime Kuma to reach service health endpoints |
 | `cloudflare_tunnel` | bridge | Links Cloudflared tunnel to exposed services |
 
-> Each VLAN uses a dedicated vNIC on this setup (`enp6s18`, `enp6s19`), which is typical for VMs where the hypervisor assigns one vNIC per VLAN/port group. If you have a single NIC with a trunk port instead, create VLAN sub-interfaces and use those as the `parent`:
+> The ipvlan networks require a dedicated interface (or VLAN sub-interface) per VLAN. If your NIC uses a trunk port, create sub-interfaces first:
 > ```bash
-> ip link add link enp6s18 name enp6s18.110 type vlan id 110
-> ip link add link enp6s18 name enp6s18.130 type vlan id 130
+> ip link add link eth0 name eth0.110 type vlan id 110
+> ip link add link eth0 name eth0.130 type vlan id 130
 > ```
-> Then use `enp6s18.110` and `enp6s18.130` as the `-o parent` values in the `docker network create` commands in the README.
+> Then use those as the `-o parent` values in the `docker network create` commands in the README.
 
 ## Access Patterns
 
@@ -41,21 +41,21 @@ Tailscale → nginx (8080 HTTP redirect → 8081 HTTPS) → application
 
 ## DNS
 
-AdGuard Home runs on a static IP on the services VLAN and serves as the network-wide DNS resolver. UniFi firewall rules redirect all DNS traffic from every VLAN through it.
+AdGuard Home runs on a static IP on the services VLAN and serves as the network-wide DNS resolver. Firewall rules on the gateway redirect all DNS traffic from every VLAN through it.
 
-## UniFi Firewall Rules
+## Firewall Rules
 
 By default, VLANs are isolated from each other. The following inter-VLAN rules are required.
 
 **DNS — allow all VLANs to reach AdGuard Home**
 
 ```
-Source:      any VLAN (or specific VLAN subnets)
+Source:      any VLAN
 Destination: <adguard-static-ip>, port 53 (TCP + UDP)
 Action:      Accept
 ```
 
-Then set your UniFi DHCP DNS server to the AdGuard static IP for each VLAN. Optionally add a DNS intercept rule to force all port 53 traffic through AdGuard regardless of what clients have configured.
+Set your DHCP DNS server to the AdGuard static IP for each VLAN. Optionally add a DNS intercept rule to force all port 53 traffic through AdGuard regardless of what clients have configured.
 
 **Media — allow restricted VLANs to reach specific services**
 
