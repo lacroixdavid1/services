@@ -1,0 +1,177 @@
+services:
+
+  tailscale:
+    image: tailscale/tailscale:latest
+    container_name: arr-tailscale
+    hostname: arr
+    networks:
+      - proxy
+    environment:
+      - TZ=America/New_York
+      - TS_AUTHKEY=${TS_AUTHKEY}
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_SERVE_CONFIG=/ts-serve.json
+      - TS_USERSPACE=false
+      - TS_ENABLE_HEALTH_CHECK=true
+      - TS_LOCAL_ADDR_PORT=127.0.0.1:41234
+    volumes:
+      - /mnt/data-nvme/services/arr/tailscale/config:/config
+      - /mnt/data-nvme/services/arr/tailscale/state:/var/lib/tailscale
+      - ./ts-serve.json:/ts-serve.json:ro
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - net_admin
+      - sys_module
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:41234/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: always
+    pull_policy: always
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: arr-prowlarr
+    networks:
+      - proxy
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+      - PROWLARR__SERVER__URLBASE=/prowlarr
+      - PROWLARR__AUTH__METHOD=External
+      - PROWLARR__AUTH__REQUIRED=DisabledForLocalAddresses
+    volumes:
+      - /mnt/data-nvme/services/arr/prowlarr:/config
+    depends_on:
+      tailscale:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:9696/prowlarr/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    restart: always
+    pull_policy: always
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: arr-radarr
+    networks:
+      - proxy
+      - media
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+      - RADARR__SERVER__URLBASE=/radarr
+      - RADARR__AUTH__METHOD=External
+      - RADARR__AUTH__REQUIRED=DisabledForLocalAddresses
+    volumes:
+      - /mnt/data-nvme/services/arr/radarr:/config
+      - /mnt/data/medias/qbittorrent:/data/qbittorrent
+      - /mnt/data/medias/movies:/data/movies
+    depends_on:
+      tailscale:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:7878/radarr/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    restart: always
+    pull_policy: always
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: arr-sonarr
+    networks:
+      - proxy
+      - media
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+      - SONARR__SERVER__URLBASE=/sonarr
+      - SONARR__AUTH__METHOD=External
+      - SONARR__AUTH__REQUIRED=DisabledForLocalAddresses
+    volumes:
+      - /mnt/data-nvme/services/arr/sonarr:/config
+      - /mnt/data/medias/qbittorrent:/data/qbittorrent
+      - /mnt/data/medias/series:/data/series
+    depends_on:
+      tailscale:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:8989/sonarr/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    restart: always
+    pull_policy: always
+
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: arr-bazarr
+    networks:
+      - proxy
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - /mnt/data-nvme/services/arr/bazarr:/config
+      - /mnt/data/medias/series:/data/series
+      - /mnt/data/medias/movies:/data/movies
+    depends_on:
+      tailscale:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:6767/bazarr/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    restart: always
+    pull_policy: always
+
+  nginx:
+    image: nginx:alpine
+    container_name: arr-nginx
+    networks:
+      - proxy
+      - uptime_kuma
+    environment:
+      - TZ=America/New_York
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      prowlarr:
+        condition: service_healthy
+      radarr:
+        condition: service_healthy
+      sonarr:
+        condition: service_healthy
+      bazarr:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "pgrep", "-f", "nginx"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: always
+    pull_policy: always
+
+networks:
+  proxy:
+  media:
+    external: true
+  uptime_kuma:
+    external: true

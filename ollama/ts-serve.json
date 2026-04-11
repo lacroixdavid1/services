@@ -1,0 +1,29 @@
+{
+  "TCP": {
+    "443": {
+      "HTTPS": true
+    },
+    "80": {
+      "HTTP": true
+    },
+    "11434": {
+      "TCPForward": "ollama-app:11434"
+    }
+  },
+  "Web": {
+    "${TS_CERT_DOMAIN}:80": {
+      "Handlers": {
+        "/": {
+          "Proxy": "http://ollama-nginx:8080"
+        }
+      }
+    },
+    "${TS_CERT_DOMAIN}:443": {
+      "Handlers": {
+        "/": {
+          "Proxy": "http://ollama-nginx:8081"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+services:
+
+  mosquitto:
+    image: eclipse-mosquitto
+    container_name: mosquitto
+    restart: always
+    networks:
+      home_automation:
+      uptime_kuma:
+    pull_policy: always
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - /mnt/data-nvme/services/mosquitto/data:/mosquitto/data
+
+networks:
+  home_automation:
+    external: true
+  uptime_kuma:
+    external: true

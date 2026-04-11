@@ -1,0 +1,37 @@
+mqtt:
+  enabled: false
+
+detectors:
+  rocm:
+    type: rocm
+
+cameras:
+  # Add your Unifi Protect cameras here via RTSP
+  # Example:
+  # front_door:
+  #   ffmpeg:
+  #     inputs:
+  #       - path: rtsps://${FRIGATE_RTSP_USER}:${FRIGATE_RTSP_PASS}@${FRIGATE_UNIFI_HOST}/...
+  #         roles:
+  #           - detect
+  #           - record
+
+record:
+  enabled: true
+  retain:
+    days: 3
+    mode: motion
+  events:
+    retain:
+      default: 7
+      mode: active_objects
+
+snapshots:
+  enabled: true
+  retain:
+    default: 7
+
+objects:
+  track:
+    - person
+    - car

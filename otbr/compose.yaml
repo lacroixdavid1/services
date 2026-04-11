@@ -1,0 +1,37 @@
+services:
+
+  otbr:
+    image: bnutzer/otbr-tcp:latest
+    container_name: otbr
+    restart: always
+    pull_policy: always
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+      - SYS_ADMIN
+    devices:
+      - /dev/net/tun
+    networks:
+      home_automation:
+      iot_vlan110:
+        driver_opts:
+          com.docker.network.endpoint.ifname: eth110
+    environment:
+      - RCP_HOST=${RCP_HOST}
+      - RCP_PORT=6638
+      - OTBR_BACKBONE_IF=eth110
+      - TZ=America/New_York
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8081/node/state"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    volumes:
+      - /mnt/data-nvme/services/otbr/data:/data
+
+networks:
+  home_automation:
+    external: true
+  iot_vlan110:
+    external: true

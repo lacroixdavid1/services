@@ -1,0 +1,83 @@
+# https://github.com/louislam/uptime-kuma
+
+services:
+
+  tailscale:
+    image: tailscale/tailscale:latest
+    container_name: uptime-kuma-tailscale
+    hostname: uptime-kuma
+    networks:
+      - proxy
+    environment:
+      - TZ=America/New_York
+      - TS_AUTHKEY=${TS_AUTHKEY}
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_SERVE_CONFIG=/ts-serve.json
+      - TS_USERSPACE=false
+      - TS_ENABLE_HEALTH_CHECK=true
+      - TS_LOCAL_ADDR_PORT=127.0.0.1:41234
+    volumes:
+      - /mnt/data-nvme/services/uptime-kuma/tailscale/config:/config
+      - /mnt/data-nvme/services/uptime-kuma/tailscale/state:/var/lib/tailscale
+      - ./ts-serve.json:/ts-serve.json:ro
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - net_admin
+      - sys_module
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:41234/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: always
+    pull_policy: always
+
+  application:
+    image: louislam/uptime-kuma:latest
+    container_name: uptime-kuma-app
+    networks:
+      - proxy
+      - uptime_kuma
+    restart: always
+    pull_policy: always
+    environment:
+      - TZ=America/New_York
+    volumes:
+      - /mnt/data-nvme/services/uptime-kuma/app:/app/data
+    depends_on:
+      tailscale:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  nginx:
+    image: nginx:alpine
+    container_name: uptime-kuma-nginx
+    networks:
+      - proxy
+    environment:
+      - TZ=America/New_York
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      application:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "pgrep", "-f", "nginx"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: always
+    pull_policy: always
+
+networks:
+  proxy:
+  uptime_kuma:
+    external: true

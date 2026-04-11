@@ -1,0 +1,503 @@
+[[server]]
+name = "tower"
+[server.config]
+address = "https://periphery:8120" # set to your Komodo periphery address
+enabled = true
+
+##
+
+[[stack]]
+name = "adguard-home"
+[stack.config]
+server = "tower"
+poll_for_updates = true
+auto_update = true
+auto_update_all_services = true
+destroy_before_deploy = true
+linked_repo = "services"
+webhook_force_deploy = true
+run_directory = "adguard-home"
+environment = """
+TS_AUTHKEY = [[TS_AUTHKEY]]
+"""
+
+##
+
+[[stack]]
+name = "caddy"
+[stack.config]
+server = "tower"
+poll_for_updates = true
+auto_update = true
+auto_update_all_services = true
+destroy_before_deploy = true
+linked_repo = "services"
+webhook_force_deploy = true
+run_directory = "caddy"
+environment = """
+PUBLIC_DOMAIN = [[PUBLIC_DOMAIN]]
+"""
+
+##
+
+[[stack]]
+name = "changedetection"
+[stack.config]
+server = "tower"
+poll_for_updates = true
+auto_update = true
+auto_update_all_services = true
+destroy_before_deploy = true
+linked_repo = "services"
+run_directory = "changedetection"
+environment = """
+TS_AUTHKEY = [[TS_AUTHKEY]]
+"""
+
+##
+
+[[stack]]
+name = "emby"
+[stack.config]
+server = "tower"
+poll_for_updates = true
+auto_update = true
+auto_update_all_services = true
+destroy_before_deploy = true
+linked_repo = "services"
+run_directory = "emby"
+environment = """
+TS_AUTHKEY = [[TS_AUTHKEY]]
+"""
+
+##
+
+[[stack]]
+name = "esphome"
+[stack.config]
+server = "tower"
+poll_for_updates = true
+auto_update = true
+auto_update_all_services = true
+destroy_before_deploy = true
+linked_repo = "services"
+run_directory = "esphome"
+environment = """
+TS_AUTHKEY = [[TS_AUTHKEY]]
+"""
+
+##
+
+[[stack]]
+name = "home-assistant"
+[stack.config]
+server = "tower"
+poll_for_updates = true
+auto_update = true
+auto_update_all_services = true
+destroy_before_deploy = true
+linked_repo = "services"
+run_directory = "home-assistant"
+environment = """
+TS_AUTHKEY_OPENCLAW = [[TS_AUTHKEY_OPENCLAW]]
+HA_POSTGRES_USER = [[HA_POSTGRES_USER]]
+HA_POSTGRES_PASSWORD = [[HA_POSTGRES_PASSWORD]]
+"""
+
+##
+
+[[stack]]
+name = "cloudflared"
+[stack.config]
+server = "tower"
+poll_for_updates = true
+auto_update = true
+auto_update_all_services = true
+destroy_before_deploy = true
+linked_repo = "services"
+run_directory = "cloudflared"
+environment = """
+CF_TUNNEL_TOKEN = [[CF_TUNNEL_TOKEN]]
+"""
+
+##
+
+[[stack]]
+name = "ollama"
+[stack.config]
+server = "tower"
+poll_for_updates = true
+auto_update = true
+auto_update_all_services = true
+destroy_before_deploy = true
+linked_repo = "services"
+run_directory = "ollama"
+environment = """
+TS_AUTHKEY_OPENCLAW = [[TS_AUTHKEY_OPENCLAW]]
+"""
+
+##
+
+[[stack]]
+name = "jdownloader"
+[stack.config]
+server = "tower"
+poll_for_updates = true
+auto_update = true
+auto_update_all_services = true
+destroy_before_deploy = true
+linked_repo = "services"
+run_directory = "jdownloader"
+environment = """
+TS_AUTHKEY = [[TS_AUTHKEY]]
+"""
+
+##
+
+[[stack]]
+name = "matter"
+[stack.config]
+server = "tower"
+poll_for_updates = true
+auto_update = true
+auto_update_all_services = true
+destroy_before_deploy = true
+linked_repo = "services"
+run_directory = "matter"
+
+##
+
+[[stack]]
+name = "otbr"
+[stack.config]
+server = "tower"
+poll_for_updates = true
+auto_update = true
+auto_update_all_services = true
+destroy_before_deploy = true
+linked_repo = "services"
+run_directory = "otbr"
+environment = """
+RCP_HOST = [[RCP_HOST]]
+"""
+
+##
+
+[[stack]]
+name = "mosquitto"
+[stack.config]
+server = "tower"
+poll_for_updates = true
+auto_update = true
+auto_update_all_services = true
+destroy_before_deploy = true
+linked_repo = "services"
+run_directory = "mosquitto"
+
+##
+
+[[stack]]
+name = "monitoring"
+[stack.config]
+server = "tower"
+poll_for_updates = true
+auto_update = true
+auto_update_all_services = true
+destroy_before_deploy = true
+linked_repo = "services"
+run_directory = "monitoring"
+environment = """
+TS_AUTHKEY_OPENCLAW = [[TS_AUTHKEY_OPENCLAW]]
+TS_TAILNET = [[TS_TAILNET]]
+"""
+
+##
+
+[[stack]]
+name = "cloudflare-ddns"
+[stack.config]
+server = "tower"
+poll_for_updates = true
+auto_update = true
+auto_update_all_services = true
+destroy_before_deploy = true
+linked_repo = "services"
+run_directory = "cloudflare-ddns"
+environment = """
+CF_DDNS_TOKEN = [[CF_DDNS_TOKEN]]
+PUBLIC_DOMAIN = [[PUBLIC_DOMAIN]]
+"""
+
+##
+
+[[stack]]
+name = "namecheap-ddns"
+[stack.config]
+server = "tower"
+poll_for_updates = true
+auto_update = true
+auto_update_all_services = true
+destroy_before_deploy = true
+linked_repo = "services"
+run_directory = "namecheap-ddns"
+environment = """
+NC_PASS = [[NC_PASS]]
+PUBLIC_DOMAIN = [[PUBLIC_DOMAIN]]
+"""
+
+##
+
+[[stack]]
+name = "postgresql"
+[stack.config]
+server = "tower"
+poll_for_updates = true
+auto_update = true
+auto_update_all_services = true
+destroy_before_deploy = true
+linked_repo = "services"
+run_directory = "postgres"
+environment = """
+TS_AUTHKEY = [[TS_AUTHKEY]]
+POSTGRES_USER = [[POSTGRES_USER]]
+POSTGRES_PASSWORD = [[POSTGRES_PASSWORD]]
+POSTGRES_DB = [[POSTGRES_DB]]
+"""
+
+##
+
+[[stack]]
+name = "trilium"
+[stack.config]
+server = "tower"
+poll_for_updates = true
+auto_update = true
+auto_update_all_services = true
+destroy_before_deploy = true
+linked_repo = "services"
+run_directory = "trilium"
+environment = """
+TS_AUTHKEY = [[TS_AUTHKEY]]
+"""
+
+##
+
+[[stack]]
+name = "calibre-web"
+[stack.config]
+server = "tower"
+poll_for_updates = true
+auto_update = true
+auto_update_all_services = true
+destroy_before_deploy = true
+linked_repo = "services"
+run_directory = "calibre-web"
+environment = """
+TS_AUTHKEY = [[TS_AUTHKEY]]
+"""
+
+##
+
+[[stack]]
+name = "arr"
+[stack.config]
+server = "tower"
+poll_for_updates = true
+auto_update = true
+auto_update_all_services = true
+destroy_before_deploy = true
+linked_repo = "services"
+run_directory = "arr"
+environment = """
+TS_AUTHKEY = [[TS_AUTHKEY]]
+"""
+
+##
+
+[[stack]]
+name = "qbittorrent"
+[stack.config]
+server = "tower"
+poll_for_updates = true
+auto_update = true
+auto_update_all_services = true
+destroy_before_deploy = true
+linked_repo = "services"
+run_directory = "qbittorrent"
+environment = """
+TS_AUTHKEY = [[TS_AUTHKEY]]
+"""
+
+##
+
+[[stack]]
+name = "rabbitmq"
+[stack.config]
+server = "tower"
+poll_for_updates = true
+auto_update = true
+auto_update_all_services = true
+destroy_before_deploy = true
+linked_repo = "services"
+run_directory = "rabbitmq"
+environment = """
+TS_AUTHKEY = [[TS_AUTHKEY]]
+"""
+
+##
+
+[[stack]]
+name = "speedtest"
+[stack.config]
+server = "tower"
+poll_for_updates = true
+auto_update = true
+auto_update_all_services = true
+destroy_before_deploy = true
+linked_repo = "services"
+run_directory = "speedtest"
+environment = """
+TS_AUTHKEY = [[TS_AUTHKEY]]
+"""
+
+##
+
+##
+
+[[stack]]
+name = "unpoller"
+[stack.config]
+server = "tower"
+poll_for_updates = true
+auto_update = true
+auto_update_all_services = true
+destroy_before_deploy = true
+linked_repo = "services"
+run_directory = "unpoller"
+environment = """
+UNIFI_USER = [[UNIFI_USER]]
+UNIFI_PASS = [[UNPOLLER_UNIFI_PASS]]
+UNIFI_URL = [[UNIFI_URL]]
+"""
+
+##
+
+[[stack]]
+name = "uptime-kuma"
+[stack.config]
+server = "tower"
+poll_for_updates = true
+auto_update = true
+auto_update_all_services = true
+destroy_before_deploy = true
+linked_repo = "services"
+run_directory = "uptime-kuma"
+environment = """
+TS_AUTHKEY = [[TS_AUTHKEY]]
+"""
+
+##
+
+[[stack]]
+name = "zigbee"
+[stack.config]
+server = "tower"
+poll_for_updates = true
+auto_update = true
+auto_update_all_services = true
+destroy_before_deploy = true
+linked_repo = "services"
+run_directory = "zigbee"
+environment = """
+TS_AUTHKEY = [[TS_AUTHKEY]]
+"""
+
+##
+
+[[stack]]
+name = "n8n"
+[stack.config]
+server = "tower"
+poll_for_updates = true
+auto_update = true
+auto_update_all_services = true
+destroy_before_deploy = true
+linked_repo = "services"
+run_directory = "n8n"
+environment = """
+TS_AUTHKEY = [[TS_AUTHKEY]]
+TS_TAILNET = [[TS_TAILNET]]
+"""
+
+##
+
+[[stack]]
+name = "frigate"
+[stack.config]
+server = "tower"
+poll_for_updates = true
+auto_update = true
+auto_update_all_services = true
+destroy_before_deploy = true
+linked_repo = "services"
+run_directory = "frigate"
+registry_provider = "ghcr.io"
+registry_account = "blakeblackshear"
+environment = """
+TS_AUTHKEY = [[TS_AUTHKEY]]
+FRIGATE_RTSP_USER = [[FRIGATE_RTSP_USER]]
+FRIGATE_RTSP_PASS = [[FRIGATE_RTSP_PASS]]
+FRIGATE_UNIFI_HOST = [[FRIGATE_UNIFI_HOST]]
+"""
+
+##
+
+[[repo]]
+name = "services"
+[repo.config]
+server = "tower"
+builder = "tower"
+git_account = "lacroixdavid1"
+repo = "lacroixdavid1/services"
+
+##
+
+[[action]]
+name = "Nightly stack update"
+[action.config]
+schedule = "Run every day at 2:00 am"
+schedule_timezone = "America/New_York"
+file_contents = """
+// Run actions using the pre initialized 'komodo' client.
+const version = await komodo.read('GetVersion', {});
+console.log('🦎 Komodo version:', version.version, '🦎\n');
+
+const batchDeployResult = await komodo.execute('BatchDeployStack', {
+  pattern: '*'
+});
+
+for (const result of batchDeployResult) {
+  if (result.status === 'Ok') {
+    console.log('✅ Sucessfully updated stack:', result.data.target, '✅\n');
+  } else {
+    console.log('❌ Failed to update stack:', result.data.name, '❌\n');
+    console.error(result.data.error)
+  }
+}
+"""
+
+##
+
+[[builder]]
+name = "tower"
+[builder.config]
+type = "Server"
+params.server_id = "tower"
+
+##
+
+[[resource_sync]]
+name = "services"
+[resource_sync.config]
+linked_repo = "services"
+resource_path = ["komodo.toml"]

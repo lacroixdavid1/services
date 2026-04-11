@@ -1,0 +1,30 @@
+services:
+  caddy:
+    image: caddy
+    container_name: caddy
+    restart: always
+    pull_policy: always
+    networks:
+      - proxy
+      - monitoring
+      - uptime_kuma
+    ports:
+      - "80:80/udp"
+      - "80:80/tcp"
+      - "443:443/udp"
+      - "443:443/tcp"
+    environment:
+      - PUBLIC_DOMAIN=${PUBLIC_DOMAIN}
+    volumes:
+      - ./config:/etc/caddy
+      - ./static:/static:ro
+      - /mnt/data-nvme/services/caddy/app:/data
+networks:
+  proxy:
+    name: caddy_proxy
+    external: true
+  monitoring:
+    external: true
+  uptime_kuma:
+    external: true
+    

@@ -1,0 +1,86 @@
+services:
+
+  tailscale:
+    image: tailscale/tailscale:latest
+    container_name: adguard-home-tailscale
+    hostname: adguard-home
+    networks:
+      - proxy
+    environment:
+      - TZ=America/New_York
+      - TS_AUTHKEY=${TS_AUTHKEY}
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_SERVE_CONFIG=/ts-serve.json
+      - TS_USERSPACE=false
+      - TS_ENABLE_HEALTH_CHECK=true
+      - TS_LOCAL_ADDR_PORT=127.0.0.1:41234
+    volumes:
+      - /mnt/data-nvme/services/adguard-home/tailscale/config:/config
+      - /mnt/data-nvme/services/adguard-home/tailscale/state:/var/lib/tailscale
+      - ./ts-serve.json:/ts-serve.json:ro
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - net_admin
+      - sys_module
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:41234/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: always
+    pull_policy: always
+
+  application:
+    image: adguard/adguardhome:latest
+    container_name: adguard-home-app
+    networks:
+      proxy:
+      services_vlan130:
+        ipv4_address: 192.168.130.53
+    volumes:
+      - /mnt/data-nvme/services/adguard-home/conf:/opt/adguardhome/conf
+      - /mnt/data-nvme/services/adguard-home/work:/opt/adguardhome/work
+    environment:
+      - TZ=America/New_York
+    depends_on:
+      tailscale:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    restart: always
+    pull_policy: always
+
+  nginx:
+    image: nginx:alpine
+    container_name: adguard-home-nginx
+    networks:
+      - proxy
+      - uptime_kuma
+    environment:
+      - TZ=America/New_York
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      application:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "pgrep", "-f", "nginx"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: always
+    pull_policy: always
+
+networks:
+  proxy:
+  services_vlan130:
+    external: true
+  uptime_kuma:
+    external: true

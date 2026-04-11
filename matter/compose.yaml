@@ -1,0 +1,25 @@
+services:
+
+  matter-server:
+    image: ghcr.io/home-assistant-libs/python-matter-server:stable
+    container_name: matter-server
+    restart: always
+    command: --storage-path /data --paa-root-cert-dir /data/credentials --bluetooth-adapter 0 --primary-interface eth110
+    networks:
+      home_automation:
+      iot_vlan110:
+        driver_opts:
+          com.docker.network.endpoint.ifname: eth110
+    pull_policy: always
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - /mnt/data-nvme/services/matter/data:/data/
+
+networks:
+  home_automation:
+    external: true
+  iot_vlan110:
+    external: true

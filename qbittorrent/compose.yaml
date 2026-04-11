@@ -1,0 +1,96 @@
+services:
+
+  tailscale:
+    image: tailscale/tailscale:latest
+    container_name: qbittorrent-tailscale
+    hostname: qbittorrent
+    networks:
+      - proxy
+    environment:
+      - TZ=America/New_York
+      - TS_AUTHKEY=${TS_AUTHKEY}
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_SERVE_CONFIG=/ts-serve.json
+      - TS_USERSPACE=false
+      - TS_ENABLE_HEALTH_CHECK=true
+      - TS_LOCAL_ADDR_PORT=127.0.0.1:41234
+    volumes:
+      - /mnt/data-nvme/services/qbittorrent/tailscale/config:/config
+      - /mnt/data-nvme/services/qbittorrent/tailscale/state:/var/lib/tailscale
+      - ./ts-serve.json:/ts-serve.json:ro
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - net_admin
+      - sys_module
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:41234/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: always
+    pull_policy: always
+
+  application:
+    image: lscr.io/linuxserver/qbittorrent
+    container_name: qbittorrent-app
+    networks:
+      - proxy
+      - media
+    restart: always
+    pull_policy: always
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+      - WEBUI_PORT=8080
+    volumes:
+      - /mnt/data-nvme/services/qbittorrent/app:/config/qBittorrent
+      - /mnt/data/medias/events:/downloads/events
+      - /mnt/data/medias/series:/downloads/series
+      - /mnt/data/medias/movies:/downloads/movies
+      - /mnt/data/medias/incomplete:/downloads/incomplete
+      - /mnt/data/medias/seedcrap:/downloads/seedcrap
+      - /mnt/data/medias/torrents:/downloads/torrents
+      - /mnt/data/medias/switch:/downloads/switch
+      - /mnt/data/medias/books:/downloads/books
+      - /mnt/data/medias/qbittorrent:/downloads/qbittorrent
+    depends_on:
+      tailscale:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "pgrep", "-f", "qbittorrent"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  nginx:
+    image: nginx:alpine
+    container_name: qbittorrent-nginx
+    networks:
+      - proxy
+      - uptime_kuma
+    environment:
+      - TZ=America/New_York
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      application:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "pgrep", "-f", "nginx"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: always
+    pull_policy: always
+
+networks:
+  proxy:
+  media:
+    external: true
+  uptime_kuma:
+    external: true

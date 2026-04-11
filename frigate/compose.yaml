@@ -1,0 +1,94 @@
+services:
+
+  tailscale:
+    image: tailscale/tailscale:latest
+    container_name: frigate-tailscale
+    hostname: frigate
+    networks:
+      - proxy
+    environment:
+      - TZ=America/New_York
+      - TS_AUTHKEY=${TS_AUTHKEY}
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_SERVE_CONFIG=/ts-serve.json
+      - TS_USERSPACE=false
+      - TS_ENABLE_HEALTH_CHECK=true
+      - TS_LOCAL_ADDR_PORT=127.0.0.1:41234
+    volumes:
+      - /mnt/data-nvme/services/frigate/tailscale/config:/config
+      - /mnt/data-nvme/services/frigate/tailscale/state:/var/lib/tailscale
+      - ./ts-serve.json:/ts-serve.json:ro
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - net_admin
+      - sys_module
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:41234/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: always
+    pull_policy: always
+
+  application:
+    image: ghcr.io/blakeblackshear/frigate:stable-rocm
+    container_name: frigate-app
+    networks:
+      - proxy
+    restart: unless-stopped
+    pull_policy: always
+    environment:
+      - TZ=America/New_York
+      - FRIGATE_RTSP_USER=${FRIGATE_RTSP_USER}
+      - FRIGATE_RTSP_PASS=${FRIGATE_RTSP_PASS}
+      - FRIGATE_UNIFI_HOST=${FRIGATE_UNIFI_HOST}
+    volumes:
+      - /mnt/data-nvme/services/frigate/app:/config
+      - /mnt/data/frigate/recordings:/media/frigate
+      - ./config/config.yml:/config/config.yml:ro
+      - /etc/localtime:/etc/localtime:ro
+    devices:
+      - /dev/dri:/dev/dri
+      - /dev/kfd:/dev/kfd
+    group_add:
+      - "44"   # video
+      - "105"  # render
+    shm_size: "256mb"
+    depends_on:
+      tailscale:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:5000/api/version"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  nginx:
+    image: nginx:alpine
+    container_name: frigate-nginx
+    networks:
+      - proxy
+      - uptime_kuma
+    environment:
+      - TZ=America/New_York
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      application:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "pgrep", "-f", "nginx"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: always
+    pull_policy: always
+
+networks:
+  proxy:
+  uptime_kuma:
+    external: true

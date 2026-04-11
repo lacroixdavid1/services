@@ -1,0 +1,17 @@
+services:
+
+  cloudflare-ddns:
+    image: favonia/cloudflare-ddns:latest
+    container_name: cloudflare-ddns
+    restart: unless-stopped
+    pull_policy: always
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      - TZ=America/New_York
+      - CF_API_TOKEN=${CF_DDNS_TOKEN}
+      - DOMAINS=${PUBLIC_DOMAIN},*.${PUBLIC_DOMAIN}
+      - PROXIED=false

@@ -1,0 +1,23 @@
+# Environment files (may contain secrets)
+.env
+.env.*
+!.env.example
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# Claude Code local settings (personal permission overrides, machine-specific)
+.claude/settings.local.json
+
+# Editor artifacts
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Private stacks (lives in lacroixdavid1/services-private)
+stash/
+
+# Generated/runtime files
+*.log

@@ -1,0 +1,7 @@
+# Example with more options
+api:
+  port: 6053
+  batch_delay: 50ms  # Reduce latency for real-time applications
+  encryption:
+    key: "YOUR_ENCRYPTION_KEY_HERE"
+  reboot_timeout: 30min

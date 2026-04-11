@@ -1,0 +1,95 @@
+services:
+
+  tailscale:
+    image: tailscale/tailscale:latest  
+    container_name: zigbee-tailscale  
+    hostname: zigbee
+    networks:
+      - proxy
+    environment:
+      - TZ=America/New_York
+      - TS_AUTHKEY=${TS_AUTHKEY}
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_SERVE_CONFIG=/ts-serve.json
+      - TS_USERSPACE=false
+      - TS_ENABLE_HEALTH_CHECK=true  
+      - TS_LOCAL_ADDR_PORT=127.0.0.1:41234 
+    #- TS_ACCEPT_DNS=true # Uncomment when using MagicDNS
+    volumes:
+      - /mnt/data-nvme/services/zigbee/tailscale/config:/config 
+      - /mnt/data-nvme/services/zigbee/tailscale/state:/var/lib/tailscale 
+      - ./ts-serve.json:/ts-serve.json:ro
+    devices:
+      - /dev/net/tun:/dev/net/tun 
+    cap_add:
+      - net_admin
+      - sys_module   
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:41234/healthz"]
+      interval: 30s 
+      timeout: 10s 
+      retries: 3 
+      start_period: 10s 
+    restart: always
+    pull_policy: always
+
+  application:
+    image: ghcr.io/koenkk/zigbee2mqtt
+    container_name: zigbee-app
+    restart: always
+    # command: --storage-path /data --paa-root-cert-dir /data/credentials --bluetooth-adapter 0 --primary-interface eth110
+    networks:
+      proxy:
+      home_automation:
+      iot_vlan110:
+        driver_opts:
+          com.docker.network.endpoint.ifname: eth110
+    pull_policy: always
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+      - ZIGBEE2MQTT_CONFIG_FRONTEND_ENABLED=true
+      - ZIGBEE2MQTT_CONFIG_FRONTEND_HOST=0.0.0.0
+      - ZIGBEE2MQTT_CONFIG_FRONTEND_PORT=8080
+    volumes:
+      - /mnt/data-nvme/services/zigbee/data:/app/data
+      - /etc/localtime:/etc/localtime:ro
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:8080"]
+      interval: 30s 
+      timeout: 10s 
+      retries: 3 
+      start_period: 10s 
+
+  # Nginx
+  nginx:
+    image: nginx:alpine
+    container_name: zigbee-nginx
+    networks:
+      - proxy
+      - uptime_kuma
+    environment:
+      - TZ=America/New_York
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      application:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "pgrep", "-f", "nginx"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: always
+    pull_policy: always
+
+networks:
+  proxy:
+  home_automation:
+    external: true
+  iot_vlan110:
+    external: true
+  uptime_kuma:
+    external: true

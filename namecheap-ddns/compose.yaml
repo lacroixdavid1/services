@@ -1,0 +1,21 @@
+services:
+
+  namecheap-ddns-sub-domains:
+    image: linuxshots/namecheap-ddns
+    container_name: namecheap-ddns-sub-domains
+    restart: unless-stopped
+    environment:
+      - TZ=America/New_York
+      - NC_HOST=*
+      - NC_DOMAIN=${PUBLIC_DOMAIN}
+      - NC_PASS=${NC_PASS}
+
+  namecheap-ddns-main-domain:
+    image: linuxshots/namecheap-ddns
+    container_name: namecheap-ddns-main-domain
+    restart: unless-stopped
+    environment:
+      - TZ=America/New_York
+      - NC_HOST=@
+      - NC_DOMAIN=${PUBLIC_DOMAIN}
+      - NC_PASS=${NC_PASS}
