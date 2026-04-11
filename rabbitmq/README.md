@@ -6,6 +6,13 @@ AMQP message broker.
 - **Docs:** https://www.rabbitmq.com/docs
 - **Access:** Tailscale (direct TCP — no HTTP interface)
 
+## Variables
+
+| Variable | Description |
+|---|---|
+| `TS_AUTHKEY` | Tailscale auth key |
+| `DATA_NVME_PATH` | Path to NVMe storage for config and state |
+
 ## Notes
 
 - Runs in `network_mode: service:tailscale` — the AMQP port is exposed directly over Tailscale

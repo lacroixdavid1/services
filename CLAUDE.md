@@ -47,7 +47,7 @@ Some services (e.g., `home-assistant`, `monitoring/grafana`) join both `caddy_pr
 - **CPU:** Intel i9-12900KF (16 cores)
 - **RAM:** 32 GB
 - **GPU:** AMD Radeon RX 6700 XT (Navi 22) — passed through to the VM; services that need GPU access (e.g., `ollama`) use it via device passthrough in their `compose.yaml`
-- **Storage:** 512 GB (NVMe → `/mnt/data-nvme/`) and 3.6 TB (HDD → `/mnt/data/`)
+- **Storage:** 512 GB NVMe SSD (`DATA_NVME_PATH`) and 3.6 TB HDD (`DATA_PATH`)
 
 ### IoT Devices
 
@@ -58,9 +58,9 @@ Some services (e.g., `home-assistant`, `monitoring/grafana`) join both `caddy_pr
 
 ## Data Persistence
 
-Two storage tiers are available on the host:
-- `/mnt/data-nvme/services/<service-name>/` – NVMe SSD; for config, state, and small/fast data
-- `/mnt/data/` – HDD; for large data (media, archives, downloads, etc.)
+Two storage tiers are available on the host, injected as Komodo variables:
+- `${DATA_NVME_PATH}/<service-name>/` – NVMe SSD; for config, state, and small/fast data
+- `${DATA_PATH}/` – HDD; for large data (media, archives, downloads, etc.)
 
 Configuration files committed to this repo (like `nginx.conf`, `ts-serve.json`, `prometheus/`, `alertmanager/`) are bind-mounted read-only.
 

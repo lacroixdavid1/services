@@ -12,7 +12,12 @@ Cloudflare Tunnel — exposes internal services to the public internet without o
 |---|---|
 | `cloudflare_tunnel` | Reaches services exposed through the tunnel (e.g. Home Assistant) |
 
+## Variables
+
+| Variable | Description |
+|---|---|
+| `CF_TUNNEL_TOKEN` | Tunnel token from the Cloudflare Zero Trust dashboard |
+
 ## Notes
 
-- Requires `CF_TUNNEL_TOKEN` from the Cloudflare Zero Trust dashboard
 - Services are routed via tunnel rules configured in the Cloudflare dashboard, not locally

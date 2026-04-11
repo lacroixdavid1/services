@@ -14,6 +14,13 @@ Zigbee coordinator bridge — exposes Zigbee devices to Home Assistant via MQTT.
 | `iot_vlan110` | Direct access to the Zigbee coordinator on the IoT VLAN |
 | `uptime_kuma` | Health monitoring |
 
+## Variables
+
+| Variable | Description |
+|---|---|
+| `TS_AUTHKEY` | Tailscale auth key |
+| `DATA_NVME_PATH` | Path to NVMe storage for config and state |
+
 ## Notes
 
 - Coordinator is on the IoT VLAN — connected via `iot_vlan110` (`eth110` interface)

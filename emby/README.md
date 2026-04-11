@@ -14,7 +14,15 @@ Media server for movies, TV shows, and music.
 | `media` | Shared access to media storage |
 | `uptime_kuma` | Health monitoring |
 
+## Variables
+
+| Variable | Description |
+|---|---|
+| `TS_AUTHKEY` | Tailscale auth key |
+| `DATA_NVME_PATH` | Path to NVMe storage for config and state |
+| `DATA_PATH` | Path to HDD storage for the media library |
+
 ## Notes
 
 - AMD GPU is passed through (`/dev/dri`, `/dev/kfd`) for hardware transcoding via ROCm
-- Media library is mounted from HDD storage (`/mnt/data/`)
+- Media library is mounted from HDD storage (`${DATA_PATH}`)

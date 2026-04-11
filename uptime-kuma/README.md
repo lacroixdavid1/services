@@ -12,6 +12,13 @@ Service uptime monitoring with alerting and status pages.
 |---|---|
 | `uptime_kuma` | Reaches the `nginx` container of every monitored service |
 
+## Variables
+
+| Variable | Description |
+|---|---|
+| `TS_AUTHKEY` | Tailscale auth key |
+| `DATA_NVME_PATH` | Path to NVMe storage for config and state |
+
 ## Notes
 
 - Every user-facing service's `nginx` container joins the `uptime_kuma` external network so this stack can reach their health endpoints

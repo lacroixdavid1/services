@@ -12,3 +12,9 @@ Lightweight MQTT broker for IoT device messaging.
 |---|---|
 | `home_automation` | Used by Home Assistant and Zigbee2MQTT to publish/subscribe |
 | `uptime_kuma` | Health monitoring |
+
+## Variables
+
+| Variable | Description |
+|---|---|
+| `DATA_NVME_PATH` | Path to NVMe storage for config and state |

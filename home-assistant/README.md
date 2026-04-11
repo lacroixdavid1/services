@@ -16,6 +16,15 @@ Home automation hub integrating smart devices, automations, and dashboards.
 | `monitoring` | Exposes Prometheus metrics |
 | `uptime_kuma` | Health monitoring |
 
+## Variables
+
+| Variable | Description |
+|---|---|
+| `TS_AUTHKEY_OPENCLAW` | Tailscale auth key with `tag:openclaw` for inter-VM communication |
+| `HA_POSTGRES_USER` | PostgreSQL username for the Home Assistant recorder database |
+| `HA_POSTGRES_PASSWORD` | PostgreSQL password for the Home Assistant recorder database |
+| `DATA_NVME_PATH` | Path to NVMe storage for config and state |
+
 ## Notes
 
 - Uses PostgreSQL 16 as the recorder database (instead of SQLite) for better performance

@@ -13,6 +13,14 @@ BitTorrent client with a web UI.
 | `media` | Shared access to media storage with arr stack |
 | `uptime_kuma` | Health monitoring |
 
+## Variables
+
+| Variable | Description |
+|---|---|
+| `TS_AUTHKEY` | Tailscale auth key |
+| `DATA_NVME_PATH` | Path to NVMe storage for config and state |
+| `DATA_PATH` | Path to HDD storage for downloads |
+
 ## Notes
 
 - Download categories are mounted separately for organisation (`movies`, `series`, `music`, etc.)

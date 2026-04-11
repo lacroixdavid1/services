@@ -11,3 +11,10 @@ Self-hosted internet speed test tool.
 | Network | Purpose |
 |---|---|
 | `uptime_kuma` | Health monitoring |
+
+## Variables
+
+| Variable | Description |
+|---|---|
+| `TS_AUTHKEY` | Tailscale auth key |
+| `DATA_NVME_PATH` | Path to NVMe storage for config and state |

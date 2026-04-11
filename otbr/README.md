@@ -13,6 +13,13 @@ OpenThread Border Router — bridges Thread mesh networks to IP networks for Mat
 | `home_automation` | Exposes Thread border router to Home Assistant and Matter server |
 | `iot_vlan110` | Direct access to the Thread coordinator on the IoT VLAN |
 
+## Variables
+
+| Variable | Description |
+|---|---|
+| `RCP_HOST` | IP address of the Thread coordinator (e.g. SMLIGHT SLZB-MR4U) |
+| `DATA_NVME_PATH` | Path to NVMe storage for config and state |
+
 ## Notes
 
 - Uses the `bnutzer/otbr-tcp` image — required for the SMLIGHT SLZB-MR4U coordinator which uses a TCP socat bridge (`RCP_HOST` / `RCP_PORT=6638`)

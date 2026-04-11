@@ -13,6 +13,13 @@ Network-wide DNS server and ad blocker. Runs on a static IP on the services VLAN
 | `services_vlan130` | Static IP (`192.168.130.53`) — reachable as DNS from all VLANs |
 | `uptime_kuma` | Health monitoring |
 
+## Variables
+
+| Variable | Description |
+|---|---|
+| `TS_AUTHKEY` | Tailscale auth key |
+| `DATA_NVME_PATH` | Path to NVMe storage for config and state |
+
 ## Notes
 
 - DNS traffic from all VLANs is redirected to this instance via UniFi firewall rules

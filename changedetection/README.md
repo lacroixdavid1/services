@@ -12,6 +12,13 @@ Web page change monitoring with browser automation support.
 |---|---|
 | `uptime_kuma` | Health monitoring |
 
+## Variables
+
+| Variable | Description |
+|---|---|
+| `TS_AUTHKEY` | Tailscale auth key |
+| `DATA_NVME_PATH` | Path to NVMe storage for config and state |
+
 ## Notes
 
 - Uses a headless Chrome sidecar (`sockpuppetbrowser`) for JavaScript-heavy pages
