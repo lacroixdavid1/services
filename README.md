@@ -2,38 +2,6 @@
 
 Homelab Docker Compose stacks deployed on a self-hosted server via [Komodo](https://komo.do). Each subdirectory is an independent stack. Komodo polls this repo and auto-deploys on push.
 
-## Stacks
-
-| Stack | Description |
-|---|---|
-| [adguard-home](adguard-home/) | Network-wide DNS and ad blocking |
-| [arr](arr/) | Sonarr / Radarr / Prowlarr media management |
-| [caddy](caddy/) | Reverse proxy for public-facing services |
-| [calibre-web](calibre-web/) | Ebook library |
-| [changedetection](changedetection/) | Web page change monitoring |
-| [cloudflare-ddns](cloudflare-ddns/) | Dynamic DNS updates via Cloudflare |
-| [cloudflared](cloudflared/) | Cloudflare Tunnel for public access |
-| [emby](emby/) | Media server |
-| [esphome](esphome/) | ESP microcontroller firmware management |
-| [frigate](frigate/) | NVR with object detection |
-| [home-assistant](home-assistant/) | Home automation hub (with PostgreSQL) |
-| [jdownloader](jdownloader/) | Download manager |
-| [matter](matter/) | Matter controller |
-| [monitoring](monitoring/) | Prometheus + Grafana + Loki + Alertmanager |
-| [mosquitto](mosquitto/) | MQTT broker |
-| [n8n](n8n/) | Workflow automation |
-| [namecheap-ddns](namecheap-ddns/) | Dynamic DNS updates via Namecheap |
-| [ollama](ollama/) | Local LLM inference |
-| [otbr](otbr/) | OpenThread Border Router |
-| [postgres](postgres/) | Standalone PostgreSQL instance |
-| [qbittorrent](qbittorrent/) | BitTorrent client |
-| [rabbitmq](rabbitmq/) | Message broker |
-| [speedtest](speedtest/) | Periodic internet speed tracking |
-| [trilium](trilium/) | Personal knowledge base |
-| [unpoller](unpoller/) | UniFi metrics exporter for Prometheus |
-| [uptime-kuma](uptime-kuma/) | Service uptime monitoring |
-| [zigbee](zigbee/) | Zigbee2MQTT coordinator |
-
 ## Network Architecture
 
 The server runs multiple isolated VLANs managed by a UniFi gateway. Docker containers join these networks directly via ipvlan L2, allowing them to appear as first-class devices on each VLAN.
@@ -51,6 +19,11 @@ The server runs multiple isolated VLANs managed by a UniFi gateway. Docker conta
 |---|---|---|
 | `iot_vlan110` | ipvlan L2 (`enp6s19`) | Direct access to IoT VLAN — used by Home Assistant, OTBR, Frigate |
 | `services_vlan130` | ipvlan L2 (`enp6s18`) | Stable IP on services VLAN — used by AdGuard Home for network-wide DNS |
+| `caddy_proxy` | bridge | Links Caddy to publicly exposed services |
+| `home_automation` | bridge | Internal bus between Home Assistant, Mosquitto, and Zigbee2MQTT |
+| `monitoring` | bridge | Links Prometheus to services that expose metrics |
+| `uptime_kuma` | bridge | Allows Uptime Kuma to reach service health endpoints |
+| `cloudflare_tunnel` | bridge | Links Cloudflared tunnel to exposed services |
 
 > Each VLAN uses a dedicated vNIC on this setup (`enp6s18`, `enp6s19`), which is typical for VMs where the hypervisor assigns one vNIC per VLAN/port group. If you have a single NIC with a trunk port instead, create VLAN sub-interfaces and use those as the `parent`:
 > ```bash
@@ -58,11 +31,6 @@ The server runs multiple isolated VLANs managed by a UniFi gateway. Docker conta
 > ip link add link enp6s18 name enp6s18.130 type vlan id 130
 > ```
 > Then use `enp6s18.110` and `enp6s18.130` as the `-o parent` values in the `docker network create` commands below.
-| `caddy_proxy` | bridge | Links Caddy to publicly exposed services |
-| `home_automation` | bridge | Internal bus between Home Assistant, Mosquitto, and Zigbee2MQTT |
-| `monitoring` | bridge | Links Prometheus to services that expose metrics |
-| `uptime_kuma` | bridge | Allows Uptime Kuma to reach service health endpoints |
-| `cloudflare_tunnel` | bridge | Links Cloudflared tunnel to exposed services |
 
 ### Access Patterns
 
