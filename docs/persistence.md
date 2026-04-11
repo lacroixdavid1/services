@@ -1,4 +1,4 @@
-# Storage
+# Persistence
 
 The server uses a two-tier storage layout:
 

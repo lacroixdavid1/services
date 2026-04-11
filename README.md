@@ -3,7 +3,7 @@
 Homelab Docker Compose stacks deployed on a self-hosted server via [Komodo](https://komo.do). Each subdirectory is an independent stack. Komodo polls this repo and auto-deploys on push.
 
 For network architecture, VLAN setup, firewall rules, and access patterns see [docs/networking.md](docs/networking.md).
-For storage layout and volume mount conventions see [docs/storage.md](docs/storage.md).
+For storage layout and volume mount conventions see [docs/persistence.md](docs/persistence.md).
 
 ## Prerequisites
 
