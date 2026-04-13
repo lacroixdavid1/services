@@ -45,7 +45,7 @@ services:
       - N8N_HOST=n8n.${TS_TAILNET}
       - N8N_PORT=5678
       - N8N_PROTOCOL=https
-      - WEBHOOK_URL=https://n8n.${TS_TAILNET}
+      - WEBHOOK_URL=https://n8n.${PUBLIC_DOMAIN}
       - N8N_TRUSTED_PROXIES=*
     volumes:
       - ${DATA_NVME_PATH}/n8n/app:/root/.n8n
@@ -65,6 +65,7 @@ services:
     networks:
       - proxy
       - uptime_kuma
+      - caddy_proxy
     environment:
       - TZ=America/New_York
     volumes:
@@ -84,4 +85,6 @@ services:
 networks:
   proxy:
   uptime_kuma:
+    external: true
+  caddy_proxy:
     external: true

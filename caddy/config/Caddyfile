@@ -27,6 +27,16 @@ static.{$PUBLIC_DOMAIN} {
 # 	reverse_proxy http://hoppscotch:3170
 # }
 
+n8n.{$PUBLIC_DOMAIN} {
+	handle /webhook/* {
+		reverse_proxy http://n8n-nginx:8081
+	}
+	handle /webhook-test/* {
+		reverse_proxy http://n8n-nginx:8081
+	}
+	respond 404
+}
+
 :443, :80 {
 	respond "" 204
 }
