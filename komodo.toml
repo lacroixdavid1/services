@@ -38,6 +38,7 @@ run_directory = "caddy"
 environment = """
 PUBLIC_DOMAIN = [[PUBLIC_DOMAIN]]
 DATA_NVME_PATH = [[DATA_NVME_PATH]]
+DATA_PATH = [[DATA_PATH]]
 """
 
 ##

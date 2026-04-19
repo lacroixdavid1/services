@@ -27,6 +27,11 @@ static.{$PUBLIC_DOMAIN} {
 # 	reverse_proxy http://hoppscotch:3170
 # }
 
+files.{$PUBLIC_DOMAIN} {
+	root * /files
+	file_server
+}
+
 n8n.{$PUBLIC_DOMAIN} {
 	handle /webhook/* {
 		reverse_proxy http://n8n-nginx:8081

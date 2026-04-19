@@ -19,6 +19,7 @@ services:
       - ./config:/etc/caddy
       - ./static:/static:ro
       - ${DATA_NVME_PATH}/caddy/app:/data
+      - ${DATA_PATH}/files:/files:ro
 networks:
   proxy:
     name: caddy_proxy
