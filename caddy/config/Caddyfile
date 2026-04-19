@@ -19,8 +19,12 @@ calibre.{$PUBLIC_DOMAIN} {
 }
 
 static.{$PUBLIC_DOMAIN} {
-    root * /static
-    file_server
+	header X-Robots-Tag "noindex, nofollow"
+	handle /robots.txt {
+		respond "User-agent: *\nDisallow: /" 200
+	}
+	root * /static
+	file_server
 }
 
 # hoppscotch.{$PUBLIC_DOMAIN} {
@@ -28,6 +32,10 @@ static.{$PUBLIC_DOMAIN} {
 # }
 
 files.{$PUBLIC_DOMAIN} {
+	header X-Robots-Tag "noindex, nofollow"
+	handle /robots.txt {
+		respond "User-agent: *\nDisallow: /" 200
+	}
 	root * /files
 	file_server
 }
